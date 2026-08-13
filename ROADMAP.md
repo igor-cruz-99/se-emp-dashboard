@@ -41,9 +41,38 @@ tráfego dão o mesmo investimento, leads, agendamentos e vendas.
       existir export do CRM antigo com status, fecha.
 - [ ] **Leads: linha ou pessoa?** Hoje conta linhas. Em janeiro são 2.065
       registros para 1.822 emails únicos; mudar sobe o CPL ~13%.
-- [ ] **`VITE_DEV_SKIP_AUTH` e `DEV_SKIP_AUTH` estão em `1`** no `.env.local`.
-      Voltar para `0` antes de publicar.
-- [ ] **Deploy na Vercel** — repo, variáveis de ambiente e allowlist.
+- [x] ~~**`VITE_DEV_SKIP_AUTH` e `DEV_SKIP_AUTH` em `1`**~~ — não é risco de
+      publicação: o front tranca em `import.meta.env.DEV` (some do bundle) e o
+      `api/dashboard.ts` tranca em `NODE_ENV !== 'production'`. Conferido no
+      bundle de produção e na URL publicada: cai no login. As duas variáveis
+      podem ficar em `1` no `.env.local` sem afetar a Vercel.
+- [x] ~~**Deploy na Vercel**~~ — ver "Publicação" abaixo.
+- [ ] **Rotacionar a `service_role`** do Business Data (ver dívidas técnicas).
+- [ ] **Rodar `sql/30_fechar_sondas.sql`** para tirar `se_q`/`q` do ar.
+- [ ] **Ligar o GitHub na conta Vercel** para voltar o deploy automático —
+      hoje é manual (`npx vercel --prod`). Ver "Publicação".
+
+## Publicação
+
+- Repositório: `igor-cruz-99/se-emp-dashboard` (**público**, mesma razão do WEP:
+  na conta Hobby, repo privado bloqueia deploy quando o autor do commit não é
+  membro da conta Vercel).
+- Projeto Vercel: `igorcruz-2142s-projects/se-emp-dashboard`.
+- URL: <https://se-emp-dashboard.vercel.app>
+- Variáveis em Production e Preview: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE`,
+  `SUPABASE_AUTH_URL`, `SUPABASE_AUTH_ANON_KEY`, `VITE_SUPABASE_AUTH_URL`,
+  `VITE_SUPABASE_AUTH_ANON_KEY`, `DASHBOARD_ALLOWED_DOMAINS`.
+  **`DEV_SKIP_AUTH` não está lá e não deve ir.**
+
+⚠️ **O deploy NÃO é automático.** `vercel git connect` falhou com "You need to
+add a Login Connection to your GitHub account first" — a conta Vercel não tem
+o GitHub ligado como método de login. Enquanto isso não for feito no painel da
+Vercel, `git push` publica no GitHub mas **não republica o site**. Para publicar
+uma versão nova:
+
+```
+npm run build && npx vercel --prod
+```
 
 ## Armadilhas já encontradas (não repetir)
 
@@ -68,8 +97,14 @@ tráfego dão o mesmo investimento, leads, agendamentos e vendas.
   "return type mismatch". Existe porque o "Exposed schemas" deste projeto
   Supabase não aceita schemas novos.
 - **`mkt_se.q(sql)` e `public.se_q(sql)`** são ferramentas de desenvolvimento
-  (executam SELECT vindo de fora, com trava `STABLE`). Remover quando o painel
-  estiver estável: `drop function public.se_q(text); drop function mkt_se.q(text);`
+  (executam SELECT vindo de fora, com trava `STABLE`). ⚠️ A `se_q` é
+  `security definer` e pertence ao `postgres`: quem consegue chamá-la roda
+  comando **com poder de dono do banco**, não com o poder de quem chamou. Só a
+  `service_role` tem execute, e ela não está na allowlist do `api/dashboard.ts`
+  — mas a `service_role` passou pelo histórico de conversa. A `mkt_se.q` é o
+  caso menor (não é definer, e o `mkt_se` não está exposto na API), porém está
+  com execute para `anon`/`authenticated`: vira SQL aberto no dia em que
+  alguém expuser o schema. **Fechar com `sql/30_fechar_sondas.sql`.**
 - **A `service_role` do Business Data e as senhas dos bancos de origem**
   passaram pelo histórico de conversa. Vale rotacionar a `service_role` antes de
   publicar.
