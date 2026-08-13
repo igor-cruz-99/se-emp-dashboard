@@ -1,6 +1,13 @@
 node_modules
 dist
+sql/.gerado/
+.vercel
+
+# ⚠️ A negação tem de vir DEPOIS dos padrões que ela desfaz — o último
+# padrão que casa é o que vale. A CLI da Vercel acrescenta `.env*` no fim
+# do arquivo sozinha; se ele ficar abaixo do `!`, o .env.example volta a
+# ser ignorado e o modelo de variáveis some do repositório.
 .env
 .env.*
+.env*
 !.env.example
-sql/.gerado/
