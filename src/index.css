@@ -1,0 +1,88 @@
+@import 'tailwindcss';
+
+/**
+ * Tema — cinza-escuro com turquesa fluorescente, tirado da arte de referência.
+ * Reskin acontece só aqui: nenhum componente escreve cor literal.
+ */
+@theme {
+  --color-bg: #070b10;
+  --color-bg-grid: #0d141c;
+  --color-card: #0e151d;
+  --color-card-alt: #121b25;
+  --color-line: #1c2836;
+
+  --color-turq: #22e1d6;
+  --color-turq-soft: #7bf3ea;
+  --color-turq-deep: #0e8f8a;
+
+  --color-ink: #e8f4f6;
+  /* Secundários clareados: no fundo #070b10 os tons antigos (#7c8fa0/#4d6072)
+     ficavam abaixo do contraste confortável para texto pequeno. */
+  --color-muted: #a7b8c6;
+  --color-faint: #8497a7;
+
+  --color-good: #34d399;
+  --color-warn: #fbbf24;
+  --color-bad: #f87171;
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Malha de fundo da arte — sutil, só dá textura ao vazio. */
+.fundo-grid {
+  background-image:
+    linear-gradient(to right, var(--color-bg-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-bg-grid) 1px, transparent 1px);
+  background-size: 46px 46px;
+}
+
+/* Rótulos em caixa alta e espaçados, como no mock. */
+.rotulo {
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/**
+ * Título de bloco e de card: mesma forma do .rotulo, mas em branco.
+ * Classe própria em vez de sobrescrever a cor com utilitário — `.rotulo` é
+ * definido depois do Tailwind no arquivo, então venceria um `text-ink` solto
+ * por ordem de cascata (mesma especificidade).
+ */
+.titulo {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+}
+
+/* Números tabulares: evita o valor "dançar" ao atualizar. */
+.numero {
+  font-variant-numeric: tabular-nums;
+}
+
+/**
+ * Ícone de calendário do <input type="date"> em branco.
+ * `color-scheme: dark` é o caminho certo — ele diz ao navegador que o campo
+ * está em fundo escuro, e o ícone nativo se adapta junto com o seletor que
+ * abre ao clicar. Um `filter: invert()` só no ícone deixaria o calendário
+ * suspenso ainda em tema claro.
+ */
+input[type='date'] {
+  color-scheme: dark;
+}
