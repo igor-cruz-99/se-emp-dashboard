@@ -48,7 +48,8 @@ tráfego dão o mesmo investimento, leads, agendamentos e vendas.
       podem ficar em `1` no `.env.local` sem afetar a Vercel.
 - [x] ~~**Deploy na Vercel**~~ — ver "Publicação" abaixo.
 - [ ] **Rotacionar a `service_role`** do Business Data (ver dívidas técnicas).
-- [ ] **Rodar `sql/30_fechar_sondas.sql`** para tirar `se_q`/`q` do ar.
+- [x] ~~**Rodar `sql/30_fechar_sondas.sql`**~~ — feito em 13/08/2026. Conferido:
+      `se_q` devolve 404 (PGRST202) e as RPCs do painel seguem em 200.
 - [ ] **Ligar o GitHub na conta Vercel** para voltar o deploy automático —
       hoje é manual (`npx vercel --prod`). Ver "Publicação".
 

@@ -10,6 +10,12 @@
  *   SQL  (precisa da função mkt_se.q — ver sql/06_sonda.sql)
  *        roda qualquer SELECT, inclusive agregação. É o modo útil.
  *
+ *        ⚠️ DESLIGADO desde 13/08/2026. O sql/30_fechar_sondas.sql removeu a
+ *        `q` e a `se_q` antes da publicação — a `se_q` era security definer do
+ *        `postgres`, ou seja, executava com poder de dono do banco. Este modo
+ *        devolve 404 (PGRST202) até alguém rodar o sql/06 de novo, e nesse
+ *        caso o sql/30 tem de ser rodado outra vez antes de publicar.
+ *
  *   --tabela  (só precisa do schema exposto no Data API)
  *        lê uma tabela/view via PostgREST. Sem group by, sem join.
  *
