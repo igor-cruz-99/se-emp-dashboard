@@ -12,6 +12,7 @@ import {
 import { Panel } from '../ui/Panel'
 import { RendaDonut } from '../origem/RendaDonut'
 import { formatInt } from '../../utils/format'
+import { tooltipProps } from '../../utils/chartTheme'
 import type { PerfilLinha } from '../../types'
 
 /**
@@ -56,12 +57,6 @@ function tom(v: number, max: number): string {
 }
 
 const eixoTick = { fill: 'var(--color-muted)', fontSize: 11 }
-const tooltipEstilo = {
-  background: 'var(--color-card-alt)',
-  border: '1px solid var(--color-line)',
-  borderRadius: 10,
-  fontSize: 12,
-}
 
 export function PerfilLead({ linhas }: { linhas: PerfilLinha[] }) {
   const dias = linhas
@@ -129,8 +124,7 @@ export function PerfilLead({ linhas }: { linhas: PerfilLinha[] }) {
                 />
                 <Tooltip
                   cursor={{ fill: 'var(--color-card-alt)' }}
-                  contentStyle={tooltipEstilo}
-                  labelStyle={{ color: 'var(--color-muted)' }}
+                  {...tooltipProps}
                   formatter={(v) => [`${formatInt(Number(v))} leads`, '']}
                 />
                 <Bar dataKey="leads" radius={[0, 4, 4, 0]} isAnimationActive={false}>
@@ -176,8 +170,7 @@ export function PerfilLead({ linhas }: { linhas: PerfilLinha[] }) {
                 <YAxis tick={eixoTick} axisLine={false} tickLine={false} width={40} />
                 <Tooltip
                   cursor={{ fill: 'var(--color-card-alt)' }}
-                  contentStyle={tooltipEstilo}
-                  labelStyle={{ color: 'var(--color-muted)' }}
+                  {...tooltipProps}
                   formatter={(v) => [`${formatInt(Number(v))} leads`, '']}
                 />
                 <Bar dataKey="leads" radius={[3, 3, 0, 0]} isAnimationActive={false}>
@@ -238,8 +231,7 @@ export function PerfilLead({ linhas }: { linhas: PerfilLinha[] }) {
                   />
                   <Tooltip
                     cursor={{ fill: 'var(--color-card-alt)' }}
-                    contentStyle={tooltipEstilo}
-                    labelStyle={{ color: 'var(--color-muted)' }}
+                    {...tooltipProps}
                     formatter={(v) => [`${formatInt(Number(v))} leads`, '']}
                   />
                   <Bar dataKey="leads" radius={[0, 4, 4, 0]} isAnimationActive={false}>

@@ -11,6 +11,7 @@ import {
 } from 'recharts'
 import { Panel, SectionTitle } from '../ui/Panel'
 import { diaCurto } from '../../utils/format'
+import { tooltipProps } from '../../utils/chartTheme'
 import type { DiaSerie } from '../../types'
 
 /**
@@ -85,13 +86,7 @@ export function ChartCard({
             />
             <Tooltip
               cursor={{ fill: 'var(--color-card-alt)' }}
-              contentStyle={{
-                background: 'var(--color-card-alt)',
-                border: '1px solid var(--color-line)',
-                borderRadius: 10,
-                fontSize: 12,
-              }}
-              labelStyle={{ color: 'var(--color-muted)' }}
+              {...tooltipProps}
               formatter={(v) => [formatar(v as number), titulo]}
             />
             <ReferenceLine y={media} stroke="var(--color-muted)" strokeDasharray="4 4" />

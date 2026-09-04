@@ -14,6 +14,7 @@ import { Panel } from '../ui/Panel'
 import { heat, maxDe } from '../../utils/heat'
 import { corEscala } from '../../utils/metaColor'
 import { formatBRL, formatBRLCurto, formatInt, formatPct } from '../../utils/format'
+import { tooltipProps, tooltipRotulo } from '../../utils/chartTheme'
 import type { MacroLinha } from '../../types'
 
 /**
@@ -317,13 +318,10 @@ export function MatrizMacro({ linhas }: { linhas: MacroLinha[] }) {
               />
               <Tooltip
                 cursor={{ fill: 'var(--color-card-alt)' }}
-                contentStyle={{
-                  background: 'var(--color-card-alt)',
-                  border: '1px solid var(--color-line)',
-                  borderRadius: 10,
-                  fontSize: 12,
-                }}
-                labelStyle={{ color: 'var(--color-muted)', textTransform: 'capitalize' }}
+                {...tooltipProps}
+                // O mês vem em minúscula da RPC ('agosto'); só aqui o rótulo
+                // precisa de capitalização, então sobrescreve depois do spread.
+                labelStyle={{ ...tooltipRotulo, textTransform: 'capitalize' }}
                 formatter={(v, n) =>
                   n === 'cpl'
                     ? [formatBRL(Number(v)), 'CPL']

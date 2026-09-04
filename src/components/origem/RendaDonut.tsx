@@ -1,6 +1,7 @@
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
 import { Panel } from '../ui/Panel'
 import { formatInt, formatPct } from '../../utils/format'
+import { tooltipProps } from '../../utils/chartTheme'
 import type { RendaLinha } from '../../types'
 
 /**
@@ -152,13 +153,7 @@ export function RendaDonut({
                 ))}
               </Pie>
               <Tooltip
-                contentStyle={{
-                  background: 'var(--color-card-alt)',
-                  border: '1px solid var(--color-line)',
-                  borderRadius: 10,
-                  fontSize: 12,
-                }}
-                labelStyle={{ color: 'var(--color-muted)' }}
+                {...tooltipProps}
                 formatter={(v, n) => [`${formatInt(Number(v))} leads`, String(n)]}
               />
             </PieChart>
