@@ -16,6 +16,7 @@ import { useDashboardData } from '../hooks/useDashboardData'
 import { useMacro } from '../hooks/useMacro'
 import { supabaseAuth } from '../lib/supabase'
 import { formatBRL, formatBRLCurto, formatInt, formatPct } from '../utils/format'
+import { comImpostoMacro, comImpostoPainel } from '../utils/impostoMeta'
 import type { Filtros } from '../types'
 
 /**
@@ -57,8 +58,22 @@ export function Dashboard() {
     origens: ORIGENS_CONHECIDAS.filter((o) => !DESMARCADAS_PADRAO.includes(o)),
   }))
 
-  const { dados, carregando, erro } = useDashboardData(filtros)
-  const macro = useMacro()
+  // O imposto da Meta nasce LIGADO: o custo real da empresa é 12% acima do que
+  // a plataforma cobra, e é esse que o gestor precisa ver por padrão. O
+  // desligado existe para conferir contra o gerenciador de anúncios.
+  const [imposto, setImposto] = useState(true)
+
+  const { dados: dadosBrutos, carregando, erro } = useDashboardData(filtros)
+  const macroBruto = useMacro()
+
+  // ⚠️ O ajuste é aplicado DEPOIS da busca, num useMemo: alternar o botão
+  // recalcula na hora, sem nova ida ao servidor.
+  const dados = useMemo(() => comImpostoPainel(dadosBrutos, imposto), [dadosBrutos, imposto])
+  const macroLinhas = useMemo(
+    () => comImpostoMacro(macroBruto.linhas, imposto),
+    [macroBruto.linhas, imposto],
+  )
+
   const { kpis: k, serie, origens, renda, trafego, ciclo, perfil, formularios, metas } = dados
 
   // União do que o servidor devolveu com o que já conhecíamos, para o filtro
@@ -131,6 +146,8 @@ export function Dashboard() {
           origensDisponiveis={listaOrigens}
           origensDesmarcadas={desmarcadas}
           onOrigens={trocarOrigens}
+          imposto={imposto}
+          onImposto={setImposto}
           onSair={() => supabaseAuth?.auth.signOut()}
         />
 
@@ -243,7 +260,7 @@ export function Dashboard() {
         </div>
 
         <div id="sec-macro" className="scroll-mt-6">
-          {macro.linhas.length > 0 && <MatrizMacro linhas={macro.linhas} />}
+          {macroLinhas.length > 0 && <MatrizMacro linhas={macroLinhas} />}
         </div>
 
         {carregando && (

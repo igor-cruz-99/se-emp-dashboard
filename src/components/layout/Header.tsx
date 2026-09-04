@@ -1,5 +1,6 @@
 import type { Filtros } from '../../types'
 import { FiltroOrigens } from './FiltroOrigens'
+import { BotaoImposto } from './BotaoImposto'
 import { paraISO } from '../../utils/format'
 
 /** Atalhos de período pedidos no escopo: 30D · 7D · Ontem · Hoje. */
@@ -59,6 +60,8 @@ export function Header({
   origensDisponiveis,
   origensDesmarcadas,
   onOrigens,
+  imposto,
+  onImposto,
   onSair,
 }: {
   filtros: Filtros
@@ -68,6 +71,8 @@ export function Header({
   origensDisponiveis: string[]
   origensDesmarcadas: string[]
   onOrigens: (desmarcadas: string[]) => void
+  imposto: boolean
+  onImposto: (v: boolean) => void
   onSair: () => void
 }) {
   return (
@@ -115,6 +120,8 @@ export function Header({
             className="bg-transparent text-xs text-ink outline-none"
           />
         </div>
+
+        <BotaoImposto ligado={imposto} onMudar={onImposto} />
 
         <button
           onClick={onSair}
